@@ -1,0 +1,53 @@
+#!/bin/bash
+
+echo "=========================="
+echo "RIDON - bootanimation"
+echo "Membuat bootanimation.zip"
+echo "=========================="
+echo -n "Masukan resolusi [ENTER]: "
+read ukuran	
+
+if [ $(ls | grep $ukuran) > 0 ]
+then
+	echo -n "Berkas sudah ada [ENTER] "
+	
+else
+	
+	cp -r Dasar/ $ukuran
+	cd $ukuran
+	
+	echo "$ukuran $ukuran 15" >desc.txt
+	echo "p 1 0 part0" >> desc.txt
+	echo "p 0 0 part1" >> desc.txt
+	
+	echo "Ubah ukuran gambar menjadi $ukuran x $ukuran "
+	echo "=========================="
+	echo "Mohon tunggu ......"
+		A=($(ls part0/))
+		for i in ${A[*]}; do
+			mogrify -resize $ukuran part0/$i
+		done
+		
+		B=($(ls part1/))
+		for i in ${B[*]}; do
+			mogrify -resize $ukuran part1/$i
+		done
+	
+	echo "Membuat berkas bootanimation.zip"
+	echo "=========================="
+	echo "Mohon tunggu ......"
+	zip -r -0 bootanimation.zip part0 part1 desc.txt
+	
+	echo "Menghapus berkas temporari"
+	echo "=========================="
+	rm -rf part0/ part1/ desc.txt
+	
+	echo -n	"Selesai, Terima kasih telah menunggu [ENTER]..."
+
+fi
+
+
+read end
+
+
+
